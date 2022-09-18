@@ -1,0 +1,55 @@
+{
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "jsx": "react",
+    "lib": ["es6"],
+    "moduleResolution": "node",
+    "noEmit": true,
+    "strict": true,
+    "target": "esnext",
+    "baseUrl": "./",
+    "paths": {
+      "@*": ["./src/*"],
+      "@api/*": [
+        "./src/api/*"
+      ],
+      "@assets/*": [
+        "./src/assets/*"
+      ],
+      "@components/*": [
+        "./src/components/*"
+      ],
+      "@hooks/*": [
+        "./src/hooks/*"
+      ],
+      "@i18n/*": [
+        "./src/i18n/*"
+      ],
+      "@routes/*": [
+        "./src/routes/*"
+      ],
+      "@scenes/*": [
+        "./src/scenes/*"
+      ],
+      "@theme/*": [
+        "./src/theme/*"
+      ],
+      "@utils/*": [
+        "./src/utils/*"
+      ],
+      "@env": [
+        "./env.js"
+      ]
+    }
+  },
+  "exclude": [
+    "node_modules",
+    "babel.config.js",
+    "metro.config.js",
+    "jest.config.js"
+  ]
+}
