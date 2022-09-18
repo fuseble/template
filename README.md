@@ -1,4 +1,4 @@
-# outqource-template
+# Template
 
 - React
   - react-query
