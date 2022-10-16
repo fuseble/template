@@ -3,5 +3,5 @@
   "node": ["pm2", "docker"],
   "react-native": ["origin", "webapp"],
   "vue": ["origin"],
-  "terraform": ["ecs"]
+  "terraform": ["ecs-fargate", "s3-web"]
 }
