@@ -1,13 +1,15 @@
-FROM --platform=linux/amd64 mhart/alpine-node:16
+FROM mhart/alpine-node:16
 WORKDIR /app
 COPY package.json ./
+COPY tsconfig.json ./
 COPY /env/.env.dev ./.env
-COPY /dist ./dist
+COPY /src ./src
 COPY /prisma ./prisma
 
 RUN apk add --no-cache git
 RUN apk add --no-cache dumb-init
 RUN yarn
+RUN yarn _build
 RUN npx prisma generate
 COPY . .
 

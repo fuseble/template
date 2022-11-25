@@ -2,6 +2,7 @@ import express from "express";
 import initApp from "app";
 import config from "config/index";
 import database from "database";
+import jsonwebtokenMiddleware from "middlewares/jsonwebtoken";
 import connectAdminJS from "admin";
 
 const globalHTML = `
@@ -27,7 +28,7 @@ function goAdminJS(){
 </script>
 `;
 
-(async () => {
+const init = async () => {
   await database.$connect();
 
   await initApp.init();
@@ -37,7 +38,9 @@ function goAdminJS(){
 
   initApp.app.use(express.json({ limit: "50mb" }));
   initApp.app.use(express.urlencoded({ limit: "50mb" }));
-  initApp.middlewares([], {});
+  initApp.app.use(express.static("public"));
+  initApp.app.use(jsonwebtokenMiddleware);
+
   initApp.routers({
     globalOptions: {
       html: globalHTML,
@@ -48,4 +51,6 @@ function goAdminJS(){
   initApp.app.listen(config.PORT, () => {
     console.log(`🚀 Sever Listening on ${config.PORT}...`);
   });
-})();
+};
+
+init().then();
