@@ -1,11 +1,12 @@
 import React from 'react';
 import { NextPage } from 'next';
+import { Layout } from '@/components';
 
 const IndexContainer: NextPage = () => {
   return (
-    <div>
+    <Layout.Content seo={{ title: 'Home' }}>
       <h1>Index</h1>
-    </div>
+    </Layout.Content>
   );
 };
 
