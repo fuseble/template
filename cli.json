@@ -1,7 +1,7 @@
 {
   "react": ["cms", "cra", "next"],
-  "node": ["pm2", "docker"],
+  "node": ["express"],
   "react-native": ["origin", "webapp"],
-  "vue": ["origin"],
-  "terraform": ["ecs-fargate", "s3-web"]
+  "terraform": ["ecs-fargate", "s3-web"],
+  "shortcut": []
 }

@@ -1,0 +1,13 @@
+enum UserSocialProvider {
+  KAKAO
+  NAVER
+  GOOGLE
+  FACEBOOK
+  GITHUB
+  APPLE
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
