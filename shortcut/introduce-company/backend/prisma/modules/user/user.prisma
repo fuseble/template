@@ -1,0 +1,12 @@
+model User {
+  id String @id @default(cuid())
+  email String @unique
+  password String?
+  nickname String @unique
+  role UserRole @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+
+  notices Notice[]
+}

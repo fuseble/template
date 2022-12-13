@@ -1,0 +1,38 @@
+model Notice {
+  id String @id @default(cuid())
+  seq Int @default(autoincrement())
+  title String
+  description String? @db.VarChar(255)
+  type NoticeType @default(INFO)
+  content String @db.Text
+  published Boolean @default(false)
+
+  userId String?
+  user User? @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime? @db.Timestamp(6)
+
+  comments NoticeComment[]
+
+  @@unique([seq])
+}
+
+model NoticeComment {
+  id String @id @default(cuid())
+  content String @db.Text
+
+  noticeId String
+  notice Notice @relation(fields: [noticeId], references: [id])
+  userId String
+  user User @relation(fields: [userId], references: [id])
+
+  parentId String
+  parent NoticeComment? @relation("commentToComment", fields: [parentId], references: [id])
+  children NoticeComment[] @relation("commentToComment")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+}
