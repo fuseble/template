@@ -7,7 +7,7 @@
     "config:prod": "cp env/.env.prod .env && cp env/prod.Dockerfile Dockerfile",
     "_prisma": "npx fuseble-cli prisma --path=prisma/modules && prisma format",
     "_migrate": "prisma migrate dev",
-    "_run": "nodemon --watch '*.ts' --exec 'ts-node' -r tsconfig-paths/register ./src/index.ts",
+    "_run": "nodemon --config nodemon.json",
     "_build": "rm -rf dist && tsc -p tsconfig.json && tsc-alias -p tsconfig.json",
     "_start": "node dist/index.js",
     "local": "yarn config:local && yarn _run",

@@ -1,0 +1,6 @@
+{
+  "verbose": true,
+  "ignore": ["node_modules", "env", "prisma", "*.json"],
+  "watch": ["src", "./fuseble-config.json", "./tsconfig.json"],
+  "exec": "ts-node -r tsconfig-paths/register ./src/index.ts"
+}
