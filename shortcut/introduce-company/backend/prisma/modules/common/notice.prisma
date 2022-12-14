@@ -28,7 +28,7 @@ model NoticeComment {
   userId String
   user User @relation(fields: [userId], references: [id])
 
-  parentId String
+  parentId String?
   parent NoticeComment? @relation("commentToComment", fields: [parentId], references: [id])
   children NoticeComment[] @relation("commentToComment")
 

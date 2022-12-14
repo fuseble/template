@@ -1,0 +1,25 @@
+-- AlterTable
+ALTER TABLE `PostCategory` MODIFY `seq` INTEGER NULL AUTO_INCREMENT;
+
+-- CreateTable
+CREATE TABLE `FAQComment` (
+    `id` VARCHAR(191) NOT NULL,
+    `content` TEXT NOT NULL,
+    `faqId` VARCHAR(191) NOT NULL,
+    `userId` VARCHAR(191) NOT NULL,
+    `parentId` VARCHAR(191) NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+    `deletedAt` DATETIME(3) NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `FAQComment` ADD CONSTRAINT `FAQComment_faqId_fkey` FOREIGN KEY (`faqId`) REFERENCES `FAQ`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `FAQComment` ADD CONSTRAINT `FAQComment_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `FAQComment` ADD CONSTRAINT `FAQComment_parentId_fkey` FOREIGN KEY (`parentId`) REFERENCES `FAQComment`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;

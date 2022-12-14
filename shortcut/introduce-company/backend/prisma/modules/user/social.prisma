@@ -1,0 +1,8 @@
+model UserSocial {
+  id String @id @default(cuid())
+  provider UserSocialProvider
+  providerId String
+  userId String
+  user User @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+}

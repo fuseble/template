@@ -1,0 +1,13 @@
+model Contact {
+  id String @id @default(cuid())
+  name String?
+  email String?
+  phoneNumber String?
+  content String? @db.Text
+
+  userId String?
+  user User? @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

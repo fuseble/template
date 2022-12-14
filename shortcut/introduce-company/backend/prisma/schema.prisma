@@ -32,6 +32,53 @@ enum UserRole {
   ADMIN
   USER
 }
+// contact.prisma
+
+model Contact {
+  id          String  @id @default(cuid())
+  name        String?
+  email       String?
+  phoneNumber String?
+  content     String? @db.Text
+
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// faq.prisma
+
+model FAQ {
+  id      String  @id @default(cuid())
+  title   String
+  content String? @db.Text
+
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  deletedAt  DateTime?
+  FAQComment FAQComment[]
+}
+
+model FAQComment {
+  id      String @id @default(cuid())
+  content String @db.Text
+
+  faqId  String
+  faq    FAQ    @relation(fields: [faqId], references: [id])
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  parentId String?
+  parent   FAQComment?  @relation("commentToComment", fields: [parentId], references: [id])
+  children FAQComment[] @relation("commentToComment")
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+}
+
 // notice.prisma
 
 model Notice {
@@ -46,10 +93,11 @@ model Notice {
   userId String?
   user   User?   @relation(fields: [userId], references: [id])
 
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
-  deletedAt     DateTime?       @db.Timestamp(6)
-  NoticeComment NoticeComment[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime? @db.Timestamp(6)
+
+  comments NoticeComment[]
 
   @@unique([seq])
 }
@@ -63,7 +111,7 @@ model NoticeComment {
   userId   String
   user     User   @relation(fields: [userId], references: [id])
 
-  parentId String
+  parentId String?
   parent   NoticeComment?  @relation("commentToComment", fields: [parentId], references: [id])
   children NoticeComment[] @relation("commentToComment")
 
@@ -72,19 +120,73 @@ model NoticeComment {
   deletedAt DateTime?
 }
 
+// category.prisma
+
+model PostCategory {
+  id   String @id @default(cuid())
+  seq  Int?   @default(autoincrement())
+  name String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  parentId String?
+  parent   PostCategory?  @relation("categoryToCategory", fields: [parentId], references: [id])
+  children PostCategory[] @relation("categoryToCategory")
+
+  posts Post[]
+
+  @@unique([seq])
+}
+
+// post.prisma
+
+model Post {
+  id           String  @id @default(cuid())
+  title        String
+  content      String? @db.Text
+  thumbnailUrl String? @db.VarChar(255)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  categoryId String?
+  category   PostCategory? @relation(fields: [categoryId], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+}
+
+// social.prisma
+
+model UserSocial {
+  id         String             @id @default(cuid())
+  provider   UserSocialProvider
+  providerId String
+  userId     String
+  user       User               @relation(fields: [userId], references: [id])
+  createdAt  DateTime           @default(now())
+}
+
 // user.prisma
 
 model User {
-  id        String    @id @default(cuid())
-  email     String    @unique
-  password  String?
-  nickname  String    @unique
-  role      UserRole  @default(USER)
+  id       String   @id @default(cuid())
+  email    String   @unique
+  nickname String   @unique
+  password String?
+  role     UserRole @default(USER)
+
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
+  socials       UserSocial[]
   notices       Notice[]
+  posts         Post[]
+  Contact       Contact[]
+  FAQComment    FAQComment[]
   NoticeComment NoticeComment[]
 }
 // _relation.prisma

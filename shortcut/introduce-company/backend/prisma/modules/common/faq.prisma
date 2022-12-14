@@ -1,0 +1,27 @@
+model FAQ {
+  id String @id @default(cuid())
+  title String
+  content String? @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+}
+
+model FAQComment {
+  id String @id @default(cuid())
+  content String @db.Text
+
+  faqId String
+  faq FAQ @relation(fields: [faqId], references: [id])
+  userId String
+  user User @relation(fields: [userId], references: [id])
+
+  parentId String?
+  parent FAQComment? @relation("commentToComment", fields: [parentId], references: [id])
+  children FAQComment[] @relation("commentToComment")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+}
