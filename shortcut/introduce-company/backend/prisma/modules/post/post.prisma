@@ -2,7 +2,6 @@ model Post {
   id String @id @default(cuid())
   title String
   content String? @db.Text
-  thumbnailUrl String? @db.VarChar(255)
 
   userId String
   user User @relation(fields: [userId], references: [id])
