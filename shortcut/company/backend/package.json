@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "scripts": {
     "_build": "rm -rf dist && tsc -p tsconfig.json && tsc-alias -p tsconfig.json",
-    "_migrate": "prisma migrate dev",
     "_prisma": "npx fuseble-cli prisma --path=prisma/modules && prisma format",
+    "_migrate": "yarn _prisma && prisma migrate dev",
     "_run": "nodemon --watch '*.ts' --exec 'ts-node' -r tsconfig-paths/register src/index.ts",
     "_start": "node dist/index.js",
     "build:dev": "yarn config:dev && yarn _build",

@@ -7,6 +7,8 @@ model FAQ {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   deletedAt DateTime?
+
+  comments FAQComment[]
 }
 
 model FAQComment {

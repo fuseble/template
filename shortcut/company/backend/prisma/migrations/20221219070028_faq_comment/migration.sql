@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `PostCategory` MODIFY `seq` INTEGER NULL AUTO_INCREMENT;

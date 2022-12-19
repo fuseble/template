@@ -1,4 +1,4 @@
-import { Types } from './types';
+import { Types } from 'controllers/_core/types';
 
 export const user: Types.User = {
   function: 'user',

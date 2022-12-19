@@ -4,6 +4,7 @@ import { type PrismaArgsWithCallback } from '@fuseble.inc/node';
 export namespace Types {
   export interface Functions {
     User?: User;
+    UserSocial?: UserSocial;
     Post?: Post;
     PostCategory?: PostCategory;
     Notice?: Notice;
@@ -25,6 +26,18 @@ export namespace Types {
     deleteMany?: PrismaArgsWithCallback<Prisma.UserDeleteManyArgs>;
     update?: PrismaArgsWithCallback<Prisma.UserUpdateArgs>;
     updateMany?: PrismaArgsWithCallback<Prisma.UserUpdateManyArgs>;
+  }
+
+  export interface UserSocial extends Item {
+    findUnique?: PrismaArgsWithCallback<Prisma.UserSocialFindUniqueArgs>;
+    findFirst?: PrismaArgsWithCallback<Prisma.UserSocialFindFirstArgs>;
+    findMany?: PrismaArgsWithCallback<Prisma.UserSocialFindManyArgs>;
+    create?: PrismaArgsWithCallback<Prisma.UserSocialCreateArgs>;
+    createMany?: PrismaArgsWithCallback<Prisma.UserSocialCreateManyArgs>;
+    delete?: PrismaArgsWithCallback<Prisma.UserSocialDeleteArgs>;
+    deleteMany?: PrismaArgsWithCallback<Prisma.UserSocialDeleteManyArgs>;
+    update?: PrismaArgsWithCallback<Prisma.UserSocialUpdateArgs>;
+    updateMany?: PrismaArgsWithCallback<Prisma.UserSocialUpdateManyArgs>;
   }
 
   export interface Post extends Item {

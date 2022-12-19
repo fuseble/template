@@ -56,10 +56,11 @@ model FAQ {
   content   String? @db.Text
   published Boolean @default(false)
 
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
-  deletedAt  DateTime?
-  FAQComment FAQComment[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  comments FAQComment[]
 }
 
 model FAQComment {
@@ -121,6 +122,18 @@ model NoticeComment {
   deletedAt DateTime?
 }
 
+// price.prisma
+
+model Price {
+  id            String   @id @default(cuid())
+  name          String
+  seq           Int      @default(0)
+  price         Int?
+  pricePerMonth Int?
+  pricePerYear  Int?
+  createdAt     DateTime @default(now())
+}
+
 // category.prisma
 
 model PostCategory {
@@ -143,10 +156,9 @@ model PostCategory {
 // post.prisma
 
 model Post {
-  id           String  @id @default(cuid())
-  title        String
-  content      String? @db.Text
-  thumbnailUrl String? @db.VarChar(255)
+  id      String  @id @default(cuid())
+  title   String
+  content String? @db.Text
 
   userId String
   user   User   @relation(fields: [userId], references: [id])

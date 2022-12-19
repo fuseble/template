@@ -1,5 +1,5 @@
 import { Prisma, User } from '@prisma/client';
-import { Types } from './types';
+import { Types } from 'controllers/_core/types';
 import db from 'database';
 
 export const contact: Types.Contact = {

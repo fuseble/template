@@ -1,0 +1,9 @@
+model Price {
+  id String @id @default(cuid())
+  name String
+  seq Int @default(0)
+  price Int?
+  pricePerMonth Int?
+  pricePerYear Int?
+  createdAt DateTime @default(now())
+}

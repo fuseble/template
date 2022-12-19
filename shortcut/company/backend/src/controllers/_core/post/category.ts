@@ -1,6 +1,6 @@
 import { Prisma } from '@prisma/client';
 import db from 'database';
-import { Types } from './types';
+import { Types } from 'controllers/_core/types';
 
 export const postCategory: Types.PostCategory = {
   function: 'postCategory',

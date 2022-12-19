@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client';
-import { Types } from './types';
+import { Types } from 'controllers/_core/types';
 
 export const notice: Types.Notice = {
   function: 'notice',
