@@ -3,5 +3,5 @@
   "node": ["express"],
   "react-native": ["origin", "webapp"],
   "terraform": ["ecs-fargate", "s3-web"],
-  "shortcut": []
+  "shortcut": ["company"]
 }
