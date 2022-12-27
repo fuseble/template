@@ -45,8 +45,26 @@ export const faq: Types.FAQ = {
       res.status(200).json(req.pagination({ count, rows }));
     },
   },
-  findUnique: {
-    where: { id: '$id' },
+  findFirst: {
+    where: { id: '$id', deletedAt: null },
+    select: {
+      id: true,
+      title: true,
+      content: true,
+      createdAt: true,
+      updatedAt: true,
+      comments: {
+        select: {
+          id: true,
+          content: true,
+          user: {
+            select: { id: true, nickname: true, role: true },
+          },
+          parent: true,
+          children: true,
+        },
+      },
+    },
   },
 };
 

@@ -5,8 +5,8 @@ export const getFAQAPI: ControllerAPI = {
   tags: ['FAQ'],
   schema: 'FAQ',
   method: 'GET',
-  path: '/admin/faqs/:id',
+  path: '/faqs/:id',
   params: [{ key: 'id', type: 'string' }],
 };
 
-export const getFAQ = coreFunctions.FAQ.findUnique;
+export const getFAQ = coreFunctions.FAQ.findFirst;
