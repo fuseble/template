@@ -1,31 +1,32 @@
 import { type Application } from 'express';
-import AdminJS from 'adminjs';
+import AdminJS, { type AdminJSOptions } from 'adminjs';
 import { Database, Resource } from '@adminjs/prisma';
 import AdminJSExpress from '@adminjs/express';
 import { DMMFClass } from '@prisma/client/runtime';
 import db from 'database';
-import { COMPANY_NAME } from 'constant/company';
+import { COMPANY_NAME } from 'config';
 
 const dmmf = (db as any)._baseDmmf as DMMFClass;
 const modelMap = dmmf.modelMap;
+const adminResources = Object.entries(modelMap).map(([modelName, model]) => {
+  return {
+    resource: { model, client: db },
+    options: {},
+  };
+});
+
+const options: AdminJSOptions = {
+  resources: adminResources,
+  rootPath: '/adminjs',
+  loginPath: '/adminjs/login',
+  logoutPath: '/adminjs/logout',
+  branding: { companyName: COMPANY_NAME },
+};
 
 const dashboard = (app: Application) => {
   AdminJS.registerAdapter({ Database, Resource });
 
-  const adminResources = Object.entries(modelMap).map(([modelName, model]) => {
-    return {
-      resource: { model, client: db },
-      options: {},
-    };
-  });
-
-  const adminjs = new AdminJS({
-    resources: adminResources,
-    rootPath: '/adminjs',
-    loginPath: '/adminjs/login',
-    logoutPath: '/adminjs/logout',
-    branding: { companyName: COMPANY_NAME },
-  });
+  const adminjs = new AdminJS(options);
 
   // const router = AdminJSExpress.buildAuthenticatedRouter(admin, {
   // 	authenticate: async (email, password) => {
@@ -60,6 +61,8 @@ const dashboard = (app: Application) => {
 
   const router = AdminJSExpress.buildRouter(adminjs);
   app.use(adminjs.options.rootPath, router);
+
+  console.log(`🧡 AdminJS Loaded`, options);
 };
 
 export default dashboard;

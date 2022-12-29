@@ -2,11 +2,23 @@ import { PrismaClient } from '@prisma/client';
 import { DMMFClass } from '@prisma/client/runtime';
 
 export class Database {
-  prisma: PrismaClient;
-  softDeleteModels: string[] = [];
+  public prisma: PrismaClient;
+  public softDeleteModels: string[] = [];
+  public modelMap: DMMFClass['modelMap'] = {};
 
   constructor() {
     this.prisma = new PrismaClient();
+    this.modelMap = ((this.prisma as any)._baseDmmf as DMMFClass).modelMap;
+    this.softDeleteModels = Object.entries(this.modelMap).reduce((acc: string[], [modelName, modelConfig]) => {
+      const { fields } = modelConfig;
+      fields.forEach((field) => {
+        if (field.name === 'deletedAt' && field.type === 'DateTime') {
+          acc.push(modelName);
+        }
+      });
+      return acc;
+    }, []);
+
     this.prisma.$connect().then(() => {
       this.softDeleteInterceptors().then();
       this.loggingInterceptors().then();
@@ -14,17 +26,6 @@ export class Database {
   }
 
   async softDeleteInterceptors() {
-    const dmmf = (this.prisma as any)._baseDmmf as DMMFClass;
-    const modelMap = dmmf.modelMap;
-    Object.entries(modelMap).forEach(([modelName, modelConfig]) => {
-      const { fields } = modelConfig;
-      fields.forEach((field) => {
-        if (field.name === 'deletedAt' && field.type === 'DateTime') {
-          this.softDeleteModels.push(modelName);
-        }
-      });
-    });
-
     this.prisma.$use(async (params: any, next: any) => {
       this.softDeleteModels.forEach((model: string) => {
         if (params.model === model) {
@@ -62,4 +63,6 @@ export class Database {
 export const database = new Database();
 
 const db = database.prisma;
+export const modelMap = database.modelMap;
+
 export default db;

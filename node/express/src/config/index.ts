@@ -1,5 +1,6 @@
-import path from 'path';
-import { ParseEnv } from '@fuseble.inc/node';
+import 'dotenv/config';
+import { parseEnv } from '@fuseble.inc/node';
+import * as process from 'process';
 
 type ENV = {
   NODE_ENV: string;
@@ -13,7 +14,7 @@ type ENV = {
   SOCIAL_SALT_ROUND: number;
 };
 
-const parseEnv = new ParseEnv({ options: { path: path.join(__dirname, '../../.env') } }, [
+const config = parseEnv<ENV>(process.env, [
   'NODE_ENV',
   'PORT',
   'DATABASE_URL',
@@ -25,7 +26,7 @@ const parseEnv = new ParseEnv({ options: { path: path.join(__dirname, '../../.en
   'SOCIAL_SALT_ROUND',
 ]);
 
-const config = parseEnv.result as ENV;
+export const COMPANY_NAME = 'FUSEBLE Inc.';
 
 console.log('💙 Config Loading...', config);
 

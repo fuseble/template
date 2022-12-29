@@ -3,21 +3,20 @@ import * as enums from '@prisma/client';
 import path from 'path';
 import config from 'config';
 import controllers from 'controllers';
-import db from 'database';
+import { modelMap } from 'database';
 import Authorization from 'middlewares/authorization';
 import dashboard from 'common/dashboard';
-import { COMPANY_NAME, SERVICE_VERSION } from 'constant/company';
 
 const expressApp = new ExpressApp({
   controllers,
   authControllers: Authorization,
-  modelMap: (db as any)._baseDmmf.modelMap,
+  modelMap,
   enums,
   openAPI: {
     path: path.join(__dirname, config.SWAGGER_PATH),
     options: {
-      title: COMPANY_NAME,
-      version: SERVICE_VERSION,
+      title: 'FUSEBLE Inc.',
+      version: '1.0,0',
       urls: (config.SWAGGER_URLS || '')?.split(','),
     },
     endPoint: '/api-docs',
