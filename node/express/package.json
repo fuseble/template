@@ -23,7 +23,7 @@
   "dependencies": {
     "@adminjs/express": "^5.0.0",
     "@adminjs/prisma": "^3.0.1",
-    "@fuseble.inc/node": "^1.6.6",
+    "@fuseble.inc/node": "^1.6.8",
     "@prisma/client": "^4.7.1",
     "adminjs": "^6.1.4",
     "bcrypt": "^5.1.0",

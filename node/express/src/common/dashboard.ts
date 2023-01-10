@@ -2,12 +2,9 @@ import { type Application } from 'express';
 import AdminJS, { type AdminJSOptions } from 'adminjs';
 import { Database, Resource } from '@adminjs/prisma';
 import AdminJSExpress from '@adminjs/express';
-import { DMMFClass } from '@prisma/client/runtime';
-import db from 'database';
-import { COMPANY_NAME } from 'config';
 
-const dmmf = (db as any)._baseDmmf as DMMFClass;
-const modelMap = dmmf.modelMap;
+import db, { modelMap } from 'database';
+
 const adminResources = Object.entries(modelMap).map(([modelName, model]) => {
   return {
     resource: { model, client: db },
@@ -20,7 +17,7 @@ const options: AdminJSOptions = {
   rootPath: '/adminjs',
   loginPath: '/adminjs/login',
   logoutPath: '/adminjs/logout',
-  branding: { companyName: COMPANY_NAME },
+  branding: { companyName: 'FUSEBLE Inc.' },
 };
 
 const dashboard = (app: Application) => {
