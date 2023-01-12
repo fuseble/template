@@ -1,4 +1,4 @@
-import { ExpressApp } from '@fuseble.inc/node';
+import { App } from '@fuseble.inc/node';
 import * as enums from '@prisma/client';
 import path from 'path';
 import config from 'config';
@@ -7,7 +7,7 @@ import { modelMap } from 'database';
 import Authorization from 'middlewares/authorization';
 import dashboard from 'common/dashboard';
 
-const expressApp = new ExpressApp({
+const expressApp = new App({
   controllers,
   authControllers: Authorization,
   modelMap,

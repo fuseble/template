@@ -1,6 +1,8 @@
 import 'dotenv/config';
-import { parseEnv } from '@fuseble.inc/node';
 import * as process from 'process';
+
+import { parseEnv } from '@fuseble.inc/node';
+import { getDebug } from 'common/debug';
 
 type ENV = {
   NODE_ENV: string;
@@ -25,9 +27,5 @@ const config = parseEnv<ENV>(process.env, [
   'PASSWORD_SALT_ROUND',
   'SOCIAL_SALT_ROUND',
 ]);
-
-export const COMPANY_NAME = 'FUSEBLE Inc.';
-
-console.log('💙 Config Loading...', config);
 
 export default config;

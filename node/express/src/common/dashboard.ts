@@ -58,8 +58,6 @@ const dashboard = (app: Application) => {
 
   const router = AdminJSExpress.buildRouter(adminjs);
   app.use(adminjs.options.rootPath, router);
-
-  console.log(`🧡 AdminJS Loaded`, options);
 };
 
 export default dashboard;
