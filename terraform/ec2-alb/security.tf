@@ -3,25 +3,24 @@ resource "aws_security_group" "private_security_group" {
   description = var.aws_security_group.private.description
   vpc_id      = aws_vpc.vpc.id
 
-  ingress {
-    from_port   = var.aws_security_group.private.container_ingress.from_port
-    to_port     = var.aws_security_group.private.container_ingress.to_port
-    protocol    = var.aws_security_group.private.container_ingress.protocol
-    cidr_blocks = var.aws_security_group.private.container_ingress.cidr_blocks
+  dynamic "ingress" {
+    for_each = var.aws_security_group.private.ingress
+    content {
+      from_port   = ingress.value.from_port
+      to_port     = ingress.value.to_port
+      protocol    = ingress.value.protocol
+      cidr_blocks = ingress.value.cidr_blocks
+    }
   }
 
-  ingress {
-    from_port   = var.aws_security_group.private.database_ingress.from_port
-    to_port     = var.aws_security_group.private.database_ingress.to_port
-    protocol    = var.aws_security_group.private.database_ingress.protocol
-    cidr_blocks = var.aws_security_group.private.database_ingress.cidr_blocks
-  }
-
-  egress {
-    from_port   = var.aws_security_group.private.egress.from_port
-    to_port     = var.aws_security_group.private.egress.to_port
-    protocol    = var.aws_security_group.private.egress.protocol
-    cidr_blocks = var.aws_security_group.private.egress.cidr_blocks
+  dynamic "egress" {
+    for_each = var.aws_security_group.private.egress
+    content {
+      from_port   = egress.value.from_port
+      to_port     = egress.value.to_port
+      protocol    = egress.value.protocol
+      cidr_blocks = egress.value.cidr_blocks
+    }
   }
 
   lifecycle {
@@ -34,18 +33,24 @@ resource "aws_security_group" "public_security_group" {
   description = var.aws_security_group.public.description
   vpc_id      = aws_vpc.vpc.id
 
-  ingress {
-    from_port   = var.aws_security_group.public.container_ingress.from_port
-    to_port     = var.aws_security_group.public.container_ingress.to_port
-    protocol    = var.aws_security_group.public.container_ingress.protocol
-    cidr_blocks = var.aws_security_group.public.container_ingress.cidr_blocks
+  dynamic "ingress" {
+    for_each = var.aws_security_group.private.ingress
+    content {
+      from_port   = ingress.value.from_port
+      to_port     = ingress.value.to_port
+      protocol    = ingress.value.protocol
+      cidr_blocks = ingress.value.cidr_blocks
+    }
   }
 
-  ingress {
-    from_port   = var.aws_security_group.public.database_ingress.from_port
-    to_port     = var.aws_security_group.public.database_ingress.to_port
-    protocol    = var.aws_security_group.public.database_ingress.protocol
-    cidr_blocks = var.aws_security_group.public.database_ingress.cidr_blocks
+  dynamic "egress" {
+    for_each = var.aws_security_group.private.egress
+    content {
+      from_port   = egress.value.from_port
+      to_port     = egress.value.to_port
+      protocol    = egress.value.protocol
+      cidr_blocks = egress.value.cidr_blocks
+    }
   }
 
   ingress {
@@ -60,13 +65,6 @@ resource "aws_security_group" "public_security_group" {
     from_port   = 443
     to_port     = 443
     cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = var.aws_security_group.public.egress.from_port
-    to_port     = var.aws_security_group.public.egress.to_port
-    protocol    = var.aws_security_group.public.egress.protocol
-    cidr_blocks = var.aws_security_group.public.egress.cidr_blocks
   }
 
   lifecycle {

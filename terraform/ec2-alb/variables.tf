@@ -3,8 +3,13 @@ variable "name" {
 }
 
 variable "key_name" {
-  type = string
+  type    = string
   default = "root"
+}
+
+variable "aws_region" {
+  type    = string
+  default = "ap-northeast-2"
 }
 
 variable "aws_profile" {
@@ -12,10 +17,11 @@ variable "aws_profile" {
   default = "default"
 }
 
-variable "aws_provider" {
+variable "aws_instance" {
   type = object({
-    region  = string
-    profile = string
+    ami           = string
+    instance_type = string
+    count         = number
   })
 }
 
@@ -25,14 +31,6 @@ variable "aws_acm_certificate" {
     domain = string
   })
 }
-
-// Route53
-variable "aws_route" {
-  type = object({
-    destination_cidr_block = string
-  })
-}
-
 
 // Route53 Zone
 variable "aws_route53_zone" {
@@ -123,58 +121,46 @@ variable "aws_route_table_association" {
   })
 }
 
+variable "aws_route" {
+  type = object({
+    destination_cidr_block = string
+  })
+}
+
 // 보안 그룹
 variable "aws_security_group" {
   type = object({
     public = object({
       name        = string
       description = string
-      container_ingress = object({
+      ingress = list(object({
         from_port   = number
         to_port     = number
         protocol    = string
         cidr_blocks = list(string)
-      })
-      database_ingress = object({
+      }))
+      egress = list(object({
         from_port   = number
         to_port     = number
         protocol    = string
         cidr_blocks = list(string)
-      })
-      egress = object({
-        from_port   = number
-        to_port     = number
-        protocol    = string
-        cidr_blocks = list(string)
-      })
-      lifecycle = object({
-        create_before_destroy = bool
-      })
+      }))
     })
     private = object({
       name        = string
       description = string
-      container_ingress = object({
+      ingress = list(object({
         from_port   = number
         to_port     = number
         protocol    = string
         cidr_blocks = list(string)
-      })
-      database_ingress = object({
+      }))
+      egress = list(object({
         from_port   = number
         to_port     = number
         protocol    = string
         cidr_blocks = list(string)
-      })
-      egress = object({
-        from_port   = number
-        to_port     = number
-        protocol    = string
-        cidr_blocks = list(string)
-      })
-      lifecycle = object({
-        create_before_destroy = bool
-      })
+      }))
     })
   })
 }
@@ -186,7 +172,6 @@ variable "aws_alb" {
   })
 }
 
-// ALB Target Group
 variable "aws_alb_target_group" {
   type = object({
     name        = string
@@ -205,10 +190,15 @@ variable "aws_alb_target_group" {
   })
 }
 
-// ALB Listener
+variable "aws_alb_target_group_attachment" {
+  type = object({
+    ports = list(number)
+  })
+}
+
 variable "aws_alb_listener" {
   type = object({
-    http = object({
+    http = list(object({
       port     = string
       protocol = string
       default_action = object({
@@ -219,8 +209,8 @@ variable "aws_alb_listener" {
           status_code = string
         })
       })
-    })
-    https = object({
+    }))
+    https = list(object({
       port       = string
       protocol   = string
       ssl_policy = string
@@ -230,6 +220,6 @@ variable "aws_alb_listener" {
       default_action = object({
         type = string
       })
-    })
+    }))
   })
 }

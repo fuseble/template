@@ -14,7 +14,7 @@ resource "aws_subnet" "private_subnets" {
   availability_zone       = var.aws_subnet.availability_zone[count.index]
   map_public_ip_on_launch = false
   tags = {
-    Name = "${var.aws_subnet.private_subnet.Name}${count.index}"
+    Name = "${var.aws_subnet.private_subnet.Name}${count.index + 1}"
   }
 }
 
@@ -51,7 +51,7 @@ resource "aws_eip" "eip" {
   vpc        = var.aws_eip.vpc
   depends_on = [aws_internet_gateway.internet_gateway]
   tags = {
-    Name = "${var.aws_eip.tags.Name}${count.index}"
+    Name = "${var.aws_eip.tags.Name}${count.index + 1}"
   }
 }
 
