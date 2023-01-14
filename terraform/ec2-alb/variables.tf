@@ -133,34 +133,11 @@ variable "aws_security_group" {
     public = object({
       name        = string
       description = string
-      ingress = list(object({
-        from_port   = number
-        to_port     = number
-        protocol    = string
-        cidr_blocks = list(string)
-      }))
-      egress = list(object({
-        from_port   = number
-        to_port     = number
-        protocol    = string
-        cidr_blocks = list(string)
-      }))
+      ingress     = list(number)
     })
     private = object({
       name        = string
       description = string
-      ingress = list(object({
-        from_port   = number
-        to_port     = number
-        protocol    = string
-        cidr_blocks = list(string)
-      }))
-      egress = list(object({
-        from_port   = number
-        to_port     = number
-        protocol    = string
-        cidr_blocks = list(string)
-      }))
     })
   })
 }
@@ -178,15 +155,6 @@ variable "aws_alb_target_group" {
     port        = number
     protocol    = string
     target_type = string
-    health_check = object({
-      path                = string
-      protocol            = string
-      interval            = string
-      timeout             = string
-      healthy_threshold   = string
-      unhealthy_threshold = string
-      matcher             = string
-    })
   })
 }
 
@@ -198,28 +166,8 @@ variable "aws_alb_target_group_attachment" {
 
 variable "aws_alb_listener" {
   type = object({
-    http = list(object({
-      port     = string
-      protocol = string
-      default_action = object({
-        type = string
-        redirect = object({
-          port        = string
-          protocol    = string
-          status_code = string
-        })
-      })
-    }))
-    https = list(object({
-      port       = string
-      protocol   = string
-      ssl_policy = string
-      lifecycle = object({
-        create_before_destroy = bool
-      })
-      default_action = object({
-        type = string
-      })
-    }))
+    redirect_http = list(list(number))
+    origin_http = list(number)
+    origin_https = list(number)
   })
 }

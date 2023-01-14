@@ -8,7 +8,7 @@ resource "aws_vpc" "vpc" {
 
 # Create Private Subnets
 resource "aws_subnet" "private_subnets" {
-  count                   = var.aws_subnet.count
+  count                   = 1
   vpc_id                  = aws_vpc.vpc.id
   cidr_block              = cidrsubnet(aws_vpc.vpc.cidr_block, 8, count.index)
   availability_zone       = var.aws_subnet.availability_zone[count.index]
@@ -18,15 +18,20 @@ resource "aws_subnet" "private_subnets" {
   }
 }
 
+locals {
+  public_subnets_count = var.aws_instance.count <= 1 ? 2 : var.aws_instance.count
+  private_subnets_count = length(aws_subnet.private_subnets)
+}
+
 # Create Public Subnets
 resource "aws_subnet" "public_subnets" {
-  count                   = var.aws_subnet.count
+  count                   = local.public_subnets_count
   vpc_id                  = aws_vpc.vpc.id
-  cidr_block              = cidrsubnet(aws_vpc.vpc.cidr_block, 8, count.index + var.aws_subnet.count)
-  availability_zone       = var.aws_subnet.availability_zone[count.index]
+  cidr_block              = cidrsubnet(aws_vpc.vpc.cidr_block, 8, count.index + local.public_subnets_count)
+  availability_zone       = var.aws_subnet.availability_zone[count.index % length(var.aws_subnet.availability_zone)]
   map_public_ip_on_launch = true
   tags = {
-    Name = "${var.aws_subnet.public_subnet.Name}${count.index}"
+    Name = "${var.aws_subnet.public_subnet.Name}${count.index + 1}"
   }
 }
 
@@ -47,34 +52,37 @@ resource "aws_route" "route" {
 
 # Create a NAT gateway with an Elastic IP for each Private Subnet to get Internet Connect
 resource "aws_eip" "eip" {
-  count      = var.aws_eip.count
+  count      = local.public_subnets_count
   vpc        = var.aws_eip.vpc
   depends_on = [aws_internet_gateway.internet_gateway]
   tags = {
-    Name = "${var.aws_eip.tags.Name}${count.index + 1}"
+    Name = "${var.name}-eip-${count.index + 1}"
   }
 }
 
 resource "aws_nat_gateway" "nat_gateway" {
-  count         = var.aws_nat_gateway.count
+  count         = local.public_subnets_count
   subnet_id     = element(aws_subnet.public_subnets.*.id, count.index)
   allocation_id = element(aws_eip.eip.*.id, count.index)
 }
 
 # Create a New Route Table for Private Subnets, make it route non-local traffic through the NAT gateway to the internet
 resource "aws_route_table" "route_table" {
-  count  = var.aws_route_table.count
+  count  = local.private_subnets_count
   vpc_id = aws_vpc.vpc.id
 
   route {
     cidr_block     = "0.0.0.0/0"
     nat_gateway_id = element(aws_nat_gateway.nat_gateway.*.id, count.index)
   }
+  tags = {
+    Name = "${var.name}-route-table-${count.index + 1}"
+  }
 }
 
 # Explicitly associate the Private Subnets with the Private Route Table
 resource "aws_route_table_association" "private_route_table_association" {
-  count          = var.aws_route_table_association.count
+  count          = local.private_subnets_count
   subnet_id      = element(aws_subnet.private_subnets.*.id, count.index)
   route_table_id = element(aws_route_table.route_table.*.id, count.index)
 }

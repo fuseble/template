@@ -2,6 +2,6 @@
   "react": ["cms", "cra", "next"],
   "node": ["express"],
   "react-native": ["origin", "webapp"],
-  "terraform": ["ecs-fargate", "s3-web"],
+  "terraform": ["ecs-fargate", "ec2-alb", "s3-web"],
   "shortcut": ["company"]
 }
