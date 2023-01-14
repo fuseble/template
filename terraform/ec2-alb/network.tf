@@ -46,7 +46,7 @@ resource "aws_internet_gateway" "internet_gateway" {
 # Route the Public Subnet Traffic through the Internet Gateway
 resource "aws_route" "route" {
   route_table_id         = aws_vpc.vpc.main_route_table_id
-  destination_cidr_block = var.aws_route.destination_cidr_block
+  destination_cidr_block = "0.0.0.0/0"
   gateway_id             = aws_internet_gateway.internet_gateway.id
 }
 

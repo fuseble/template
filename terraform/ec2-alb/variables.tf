@@ -97,36 +97,6 @@ variable "aws_eip" {
   })
 }
 
-// NAT 게이트웨이
-variable "aws_nat_gateway" {
-  type = object({
-    count = number
-  })
-}
-
-// 라우팅 테이블
-variable "aws_route_table" {
-  type = object({
-    count = number
-    route = object({
-      cidr_block = string
-    })
-  })
-}
-
-// 라우팅 테이블 연결
-variable "aws_route_table_association" {
-  type = object({
-    count = number
-  })
-}
-
-variable "aws_route" {
-  type = object({
-    destination_cidr_block = string
-  })
-}
-
 // 보안 그룹
 variable "aws_security_group" {
   type = object({
